@@ -21,12 +21,15 @@ public class App {
         Quotes[] dataFromJson = gson.fromJson(new FileReader("src/main/resources/recentquotes.json"), Quotes[].class);
 
         int randomIndex = randInt(0, dataFromJson.length);
+
+        //checking that there is an author and a quote to return. If not keep looping
         while(dataFromJson[randomIndex].author == null || dataFromJson[randomIndex].text == null){
             randomIndex = randInt(0, dataFromJson.length);
         }
         this.quote = dataFromJson[randomIndex];
     }
 
+    //copied from; https://stackoverflow.com/questions/363681/how-do-i-generate-random-integers-within-a-specific-range-in-java
     public int randInt(int min, int max){
         Random rand = new Random();
         int randomNum = rand.nextInt((max - min) + 1) + min;
