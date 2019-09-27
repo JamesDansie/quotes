@@ -94,12 +94,17 @@ public class App {
 
         //making a new empty array with with one extra spot
         this.quotes = new Quote[oldQuotes.length + 1];
+
+        //restoring the old quotes
         for(int i = 0; i < oldQuotes.length; i++){
             this.quotes[i] = oldQuotes[i];
         }
+
+        //storing the new quote at the end
         this.quotes[this.quotes.length-1] = newQuote;
     }
 
+    //from lecture day 8
     public void storeQuotes() throws IOException {
         Gson gson = new Gson();
         FileWriter quoteWriter = new FileWriter("src/main/resources/recentquotes.json");
@@ -111,15 +116,9 @@ public class App {
         String quote = getRonSwansonAPI();
         Quote swanQuote = swansonConverter(quote);
 
-        System.out.println("old last quote was" + this.quotes[this.quotes.length-1].toString());
-
         if(uniqueQuote(swanQuote)){
-            System.out.println("Unique!");
             addToQuotes(swanQuote);
-            System.out.println("new last quote is" + this.quotes[this.quotes.length-1].toString());
             storeQuotes();
-        }else{
-            System.out.println("Not Unique");
         }
 
         return swanQuote;
@@ -129,14 +128,9 @@ public class App {
         App quoteApp = new App();
 
         try {
-            System.out.println("*******************************");
-            System.out.println("Made it to try");
             System.out.println(quoteApp.swanson());
         } catch (IOException e){
-            System.out.println("*******************************");
-            System.out.println("Made it to catch");
             System.out.println(quoteApp.getOfflineQuote());
-            System.out.println(e);
         }
     }
 }

@@ -8,26 +8,28 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import static org.junit.Assert.*;
 
 public class AppTest {
     App test;
     @Before
-    public void setUp() throws FileNotFoundException {
+    public void setUp() throws IOException {
         test = new App();
+        test.getRonSwansonAPI();
     }
 
     @Test
     public void getData() {
         assertNotNull("Checking that data is not null",
-                test.quote);
+                test.quotes);
     }
 
     @Test
     public void getDataFail() {
         assertFalse("Checking that data is not null",
-                test.quote == null);
+                test.quotes == null);
     }
 
     @Test
@@ -59,6 +61,39 @@ public class AppTest {
     @Test
     public void testToString() {
         assertTrue("Checking string length",
-                test.toString().length() > 2);
+                test.quotes[0].toString().length() > 2);
+    }
+
+    @Test
+    public void testGetSwanson() throws IOException {
+        assertNotNull("Getting an api response",
+                test.getRonSwansonAPI());
+    }
+
+    @Test
+    public void testGetOffline() throws FileNotFoundException {
+        assertNotNull("Getting a stored repsonse",
+                test.getOfflineQuote());
+    }
+
+    @Test
+    public void testUniquePassFail() throws IOException {
+        test.getRonSwansonAPI();
+        Quote testQ = new Quote();
+        testQ.author = "Marilyn Monroe";
+        testQ.text = " “I am good, but not an angel. I do sin, but I am not the devil. I am just a small girl in a big world trying to find someone to love.” ";
+        assertFalse("this quote is stored",
+                test.uniqueQuote(testQ));
+    }
+
+    @Test
+    public void testUniquePass() throws IOException {
+        test.getRonSwansonAPI();
+        Quote testQ = new Quote();
+        testQ.author = "Marilyn Monroe";
+        testQ.text = " “I am good, but not an angel. I do sin, but I am not the devil. I am just a small girl” ";
+        System.out.println(test.uniqueQuote(testQ));
+        assertTrue("this quote is not stored",
+                test.uniqueQuote(testQ));
     }
 }
